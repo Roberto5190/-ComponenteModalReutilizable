@@ -2,9 +2,9 @@
 
 /* Modal.css */
 .overlay.fade-in {
-    animation: fade-in .3s;
+    animation: fade-in-o 1s;
 }
-@keyframes fade-in {
+@keyframes fade-in-o {
     from {
         opacity: 0;
     }
@@ -14,16 +14,43 @@
 }
 
 .overlay.fade-out {
-    animation: fade-out .3s;
+    animation: fade-out-o 1s;
+}
+@keyframes fade-out-o {
+    from {
+        opacity: 100;
+    }
+    to{
+        opacity: 0;
+    }
+}
+
+
+.fade-in {
+    animation: fade-in 1s;
+}
+@keyframes fade-in {
+    from {
+        scale: 0;
+        opacity: 0;
+    }
+    to{
+        scale: 1;
+        opacity: 100;
+    }
+}
+
+.fade-out {
+    animation: fade-out 1s;
 }
 
 @keyframes fade-out {
     from {
         opacity: 100;
-        scale: 100;
+        scale: 1;
     }
     to{
         opacity: 0;
-        scale: 50;
+        scale: 0;
     }
 }

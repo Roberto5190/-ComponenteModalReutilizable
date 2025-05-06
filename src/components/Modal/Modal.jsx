@@ -3,22 +3,56 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 
 const Modal = ({ isOpen, onClose, children }) => {
 
+    const [show, setShow] = useState(isOpen)
 
+    useEffect(() => {
+        if (isOpen) {
+            setShow(true)
+        } else {
+            // esperamos al fade-out despues del desmontaje del componente
+            const timeout = setTimeout(() => setShow(false), 300)
+            return () => clearTimeout(timeout)
+        }
+    }, [isOpen])
 
+    // Agregar el efecto para cerrar con la tecla ESC
+    useEffect(() => {
+        const handleEsc = (event) => {
+            if (event.key === 'Escape') {
+                onClose(); // Cerrar el modal
+            }
+        };
 
-    if (!isOpen) return null; // No se muestra el modal hasta que se cierre
+        // Solo escuchamos la tecla ESC cuando el modal está abierto
+        if (isOpen) {
+            window.addEventListener('keydown', handleEsc);
+        }
+
+        // Limpiar el event listener cuando el modal se cierre
+        return () => {
+            window.removeEventListener('keydown', handleEsc);
+        };
+    }, [isOpen, onClose]);
+
+    if (!show) return null; // No se muestra el modal hasta que se cierre
 
     return (
         <div
             role="dialog"
             aria-modal="true"
             className={`overlay fixed flex justify-center items-center inset-0 z-50 bg-black/50 
+                
                 ${isOpen ? 'fade-in' : 'fade-out'}
                 `}
+            onClick={onClose}
+
         >
             <div
-                className={`content relative flex-col justify-center items-center w-[500px] bg-white rounded-3xl px-8 py-4 transition-transform duration-300 ease-in-out transform ${isOpen ? 'scale-100' : 'scale-95'
-                    }`}
+                className={`content relative flex-col justify-center items-center w-[500px] bg-white rounded-3xl px-8 py-4
+                    
+                    ${isOpen ? 'fade-in' : 'fade-out'}
+                    `}
+                onClick={e => e.stopPropagation()}
             >
                 <div className="content_top w-full flex justify-between items-center ">
                     <div className="content_top_left">
